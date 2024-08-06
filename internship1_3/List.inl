@@ -95,11 +95,11 @@ bool List<DataType>::ConstIterator::operator ==(ConstIterator right)const
 template<typename DataType>
 DataType& List<DataType>::Iterator::operator *()
 {
-    assert(m_element != nullptr);
+    assert(ConstIterator::m_element != nullptr);
 
-    assert(m_element != m_parent->m_sentinel);
+    assert(ConstIterator::m_element != ConstIterator::m_parent->m_sentinel);
 
-    return m_element->data;
+    return ConstIterator::m_element->data;
 }
 
 
