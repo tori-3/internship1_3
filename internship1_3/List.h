@@ -49,12 +49,12 @@ public:
 
         bool operator ==(ConstIterator right)const;
 
-        ///@brief イテレーターが持っているNodeのポインタを返します。
-        ///@return Nodeのポインタ
     protected:
 
+        //! ノードのポインタ
         Node* m_element = nullptr;
 
+        //! リストのポインタ
         const List* m_parent = nullptr;
 
         friend List;
