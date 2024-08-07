@@ -3,6 +3,7 @@
 #include <cassert>
 
 ///@brief 双方向リストのクラスです。
+///@tparam DataType リストに格納するデータの型です。
 template<typename DataType>
 class List
 {

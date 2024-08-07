@@ -19,104 +19,6 @@ void CheckValue(const std::vector<Grades>& ans, const List<Grades>& list)
 	}
 }
 
-//ID:8 データ数の取得 constのメソッドであるか
-#if 0
-TEST(TestListSize, IsConst)
-{
-	const List<Grades> list;
-	list.size();
-}
-#endif
-
-//ID:15 データの挿入 非constのメソッドであるか
-#if 0
-TEST(TestListInsert, IsNotConst)
-{
-	const List<Grades> list;
-	list.insert(list.begin(), Grades{ 0,"hoge" });
-}
-#endif
-
-//ID:22 データの削除 非constのメソッドであるか
-#if 0
-TEST(TestListRemove, IsNotConst)
-{
-	const List<Grades> list;
-	list.remove(list.begin());
-}
-#endif
-
-//ID:28 先頭イテレータの取得 constのリストから、ConstIteratorでないIteratorの取得が行えないかをチェック
-#if 0
-TEST(TestListBegin, IsNotConst)
-{
-	const List<Grades> list;
-	List<Grades>::Iterator it=list.begin();
-}
-#endif
-
-//ID:34 先頭コンストイテレータの取得 constのメソッドであるか
-#if 0
-TEST(TestListConstBegin, IsConst)
-{
-	const List<Grades> list;
-	list.constBegin();
-}
-#endif
-
-//ID:40 末尾イテレータの取得 constのリストから、ConstIteratorでないIteratorの取得が行えないかをチェック
-#if 0
-TEST(TestListEnd, IsNotConst)
-{
-	const List<Grades> list;
-	List<Grades>::Iterator it = list.end();
-}
-#endif
-
-//ID:46 末尾コンストイテレータの取得 constのメソッドであるか
-#if 0
-TEST(TestListConstEnd, IsConst)
-{
-	const List<Grades> list;
-	list.constEnd();
-}
-#endif
-
-//ID:2 イテレータの指す要素を取得する ConstIteratorから取得した要素に対して、値の代入が行えないかをチェック
-#if 0
-TEST(TestConstIteratorGetElement, NotAssignable)
-{
-	const List<Grades> list;
-	auto it=list.constBegin();
-	(*it) = Grades{ 0,"hoge" };
-}
-#endif
-
-//ID:17 ConstIteratorから、Iteratorのコピーが作成されないかをチェック
-#if 0
-TEST(TestConstIteratorCopy, CanNotCopyToIterator)
-{
-	List<Grades> list;
-	auto it=list.begin();
-	auto constIt=list.constBegin();
-	it = constIt;
-}
-#endif
-
-//ID:19 イテレータの代入を行う IteratorにConstIteratorを代入できない事をチェック
-#if 0
-TEST(TestConstIteratorAssign, CanNotAssignToIterator)
-{
-	List<Grades> list;
-	auto it = list.begin();
-	auto constIt = list.constBegin();
-	it = constIt;
-}
-#endif
-
-
-
-
 
 //リストのテスト
 
@@ -839,21 +741,21 @@ TEST(TestListConstEnd, AfterRemove)
 
 //イテレーターのテスト
 
-#ifdef _DEBUG
-
 //イテレータの指す要素を取得する
 
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestIteratorGetElement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::Iterator it;
 	EXPECT_DEATH((*it).score, ".*");
+#endif
 }
 
 //Iteratorから取得した要素に対して、値の代入が行えるかをチェック
 TEST(TestIteratorGetElement, AssignValue)
 {
-
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add({ 0,"hoge" });
 
@@ -861,22 +763,27 @@ TEST(TestIteratorGetElement, AssignValue)
 	(*it) = Grades{ 1,"fuga" };
 
 	EXPECT_TRUE(((*it) == Grades{ 1,"fuga" }));
+#endif
 }
 
 //リストが空の際の、先頭イテレータに対して呼び出した際の挙動
 TEST(TestIteratorGetElement, BeginIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	EXPECT_DEATH((*list.begin()).score, ".*");
+#endif
 }
 
 //末尾イテレータに対して呼び出した際の挙動
 TEST(TestIteratorGetElement, EndIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	EXPECT_DEATH((*list.end()).score, ".*");
+#endif
 }
 
 
@@ -885,29 +792,34 @@ TEST(TestIteratorGetElement, EndIterator)
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestIteratorIncrement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::Iterator it;
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
 //リストが空の際の、先頭イテレータに対して呼び出した際の挙動
 TEST(TestIteratorIncrement, BeginIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	auto it = list.begin();
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
 //末尾イテレータに対して呼び出した際の挙動
 TEST(TestIteratorIncrement, EndIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	auto it = list.end();
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
-#endif
 
 //リストに二つ以上の要素がある場合に呼び出した際の挙動
 TEST(TestIteratorIncrement, MultipleElements)
@@ -952,36 +864,38 @@ TEST(TestIteratorIncrement, PostfixIncrement)
 }
 
 
-#ifdef _DEBUG
-
 //イテレータをリストの先頭に向かって一つ進める
 
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestIteratorDecrement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::Iterator it;
 	EXPECT_DEATH(--it, ".*");
+#endif
 }
 
 //リストが空の際の、末尾イテレータに対して呼び出した際の挙動
 TEST(TestIteratorDecrement, EndIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	auto it = list.end();
 	EXPECT_DEATH(--it, ".*");
+#endif
 }
 
 //先頭イテレータに対して呼び出した際の挙動
 TEST(TestIteratorDecrement, BeginIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	auto it = list.begin();
 	EXPECT_DEATH(--it, ".*");
-}
-
 #endif
+}
 
 //リストに二つ以上の要素がある場合に呼び出した際の挙動
 TEST(TestIteratorDecrement, MultipleElements)
@@ -1068,7 +982,7 @@ TEST(TestIteratorAssign, CheckAssign)
 TEST(TestIteratorEqual, CompareBeginAndEndWhenEmpty)
 {
 	List<Grades> list;
-	EXPECT_EQ(list.begin(),list.end());
+	EXPECT_TRUE(list.begin()==list.end());
 }
 
 //同一のイテレータを比較した際の挙動
@@ -1076,7 +990,7 @@ TEST(TestIteratorEqual, CompareSame)
 {
 	List<Grades> list;
 	list.add({ 0,"hoge" });
-	EXPECT_EQ(list.begin(),list.begin());
+	EXPECT_TRUE(list.begin()==list.begin());
 }
 
 //異なるイテレータを比較した際の挙動
@@ -1129,31 +1043,35 @@ TEST(TestIteratorNotEqual, CompareNotSame)
 
 //コンストイテレーターのテスト
 
-#ifdef _DEBUG
-
 //イテレータの指す要素を取得する
 
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestConstIteratorGetElement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::ConstIterator it;
 	EXPECT_DEATH((*it).score, ".*");
+#endif
 }
 
 //リストが空の際の、先頭イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorGetElement, BeginIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	EXPECT_DEATH((*list.constBegin()).score, ".*");
+#endif
 }
 
 //末尾イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorGetElement, EndIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	EXPECT_DEATH((*list.constEnd()).score, ".*");
+#endif
 }
 
 
@@ -1163,29 +1081,34 @@ TEST(TestConstIteratorGetElement, EndIterator)
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestConstIteratorIncrement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::ConstIterator it;
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
 //リストが空の際の、先頭イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorIncrement, BeingIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	auto it = list.constBegin();
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
 //末尾イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorIncrement, EndIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	auto it = list.constEnd();
 	EXPECT_DEATH(++it, ".*");
+#endif
 }
 
-#endif
 
 
 //リストに二つ以上の要素がある場合に呼び出した際の挙動
@@ -1225,36 +1148,38 @@ TEST(TestConstIteratorIncrement, PostfixIncrement)
 }
 
 
-#ifdef _DEBUG
-
 //イテレータをリストの先頭に向かって一つ進める
 
 //リストの参照がない状態で呼び出した際の挙動
 TEST(TestConstIteratorDecrement, NoReferences)
 {
+#ifdef _DEBUG
 	List<Grades>::ConstIterator it;
 	EXPECT_DEATH(--it, ".*");
+#endif
 }
 
 //リストが空の際の、先頭イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorDecrement, BeingIteratorWhenEmpty)
 {
+#ifdef _DEBUG
 	List<Grades> list;
-	auto it = list.constBegin();
+	auto it = list.constEnd();
 	EXPECT_DEATH(--it, ".*");
+#endif
 }
 
 //先頭イテレータに対して呼び出した際の挙動
 TEST(TestConstIteratorDecrement, BeingIterator)
 {
+#ifdef _DEBUG
 	List<Grades> list;
 	list.add(Grades{ 0,"hoge" });
 	list.add(Grades{ 1,"fuga" });
 	auto it = list.constBegin();
 	EXPECT_DEATH(--it, ".*");
-}
-
 #endif
+}
 
 //リストに二つ以上の要素がある場合に呼び出した際の挙動
 TEST(TestConstIteratorDecrement, MultipleElements)

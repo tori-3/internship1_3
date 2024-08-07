@@ -15,6 +15,7 @@ template<typename DataType>
 typename List<DataType>::ConstIterator List<DataType>::ConstIterator:: operator =(const List<DataType>::ConstIterator& iterator)
 {
     m_element = iterator.m_element;
+    m_parent = iterator.m_parent;
     return  *this;
 }
 
@@ -116,13 +117,16 @@ List<DataType>::List() :m_sentinel{ new Node{} }
 template<typename DataType>
 List<DataType>::~List()
 {
-    Node* node = m_sentinel;
+    Node* node = m_sentinel->back;
 
     while (node != m_sentinel) 
     {
-        node = node->back;
-        delete node->front;
+        auto temp = node->back;
+        delete node;
+        node = temp;
     }
+
+    delete m_sentinel;
 }
 
 template<typename DataType>
